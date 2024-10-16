@@ -4,6 +4,10 @@ import 'package:serve_ease/Auth/Auth_repo.dart';
 import 'package:serve_ease/Components/snackbar.dart';
 import 'package:serve_ease/Profiles/Seeker/bloc/seeker_bloc.dart';
 
+import '../constants.dart';
+
+
+
 class SeekerHome extends StatefulWidget {
   const SeekerHome({super.key});
 
@@ -22,10 +26,10 @@ class _SeekerHomeState extends State<SeekerHome> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Seeker Home'),
+            title: const Text('Seeker Home'),
             actions: [
               IconButton(
-                icon: Icon(Icons.logout),
+                icon: const Icon(Icons.logout),
                 onPressed: () {
                   showSnackBar("logged Out", context, Icons.done,Colors.green);
                   AuthRepo().logout();
@@ -33,15 +37,15 @@ class _SeekerHomeState extends State<SeekerHome> {
               ),
             ],
           ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Seeker Home',
-                ),
-              ],
-            ),
+          body:  Center(
+            child: bottomNavScreens[state.tabIndex],
+          ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: state.tabIndex,
+            onDestinationSelected: (index){
+              context.read<SeekerBloc>().add(TabChanged(tabIndex: index));
+            },
+            destinations: bottomNav,
           ),
         );
       },

@@ -1,4 +1,4 @@
-const instance= 'http://192.168.1.106:8080';
+const instance= 'http://192.168.1.115:8080';
 
 
 //seeker login
@@ -22,4 +22,4 @@ const providerRegistration = '$instance/serviceProvider/register';
 
 
 //categories
-const categories = '$instance/category/all';
+const categoriesURL = '$instance/category/all';

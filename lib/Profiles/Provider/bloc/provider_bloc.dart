@@ -9,9 +9,12 @@ part 'provider_state.dart';
 
 class ProviderBloc extends Bloc<ProviderEvent, ProviderState> {
   ProviderRepo providerRepo;
-  ProviderBloc(this.providerRepo) : super(ProviderInitial()) {
+  ProviderBloc(this.providerRepo) : super(const ProviderInitial(tabIndex: 0)) {
     on<ProviderEvent>((event, emit) {
       // TODO: implement event handler
+      if (event is TabChanged) {
+        emit(ProviderInitial(tabIndex: event.tabIndex));
+      }
     });
   }
 }

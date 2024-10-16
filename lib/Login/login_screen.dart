@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: (){
                         Navigator.pushNamed(context, '/register');
                       },
-                      child: Text("Register", style: TextStyle(color: Colors.blue),)),
+                      child: const Text("Register", style: TextStyle(color: Colors.blue),)),
                   // Loading indicator (if the state is loading)
                   if (state is LoginLoading) const CircularProgressIndicator(),
                 ],

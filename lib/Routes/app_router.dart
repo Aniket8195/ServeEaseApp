@@ -49,7 +49,7 @@ class AppRouter{
                     (context)=>RegisterRepo(),
                     child: BlocProvider(create: (context)=>RegisterBloc(context.read<RegisterRepo>(),
 
-                    ),
+                    )..add(GetCategories()),
                       child: const RegisterScreen(),
                     )
                     )
