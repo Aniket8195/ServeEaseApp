@@ -27,14 +27,14 @@ List<Widget> bottomNavScreens = <Widget>[
   RepositoryProvider(
     create: (context) => SeekerRepo(),
     child: BlocProvider(
-      create: (context) => SeekerBloc(context.read<SeekerRepo>()),
+      create: (context) => SeekerBloc(context.read<SeekerRepo>())..add(FetchCategories()),
       child: const HomeSeeker(),
     ),
   ),
   RepositoryProvider(
     create: (context) => SeekerRepo(),
     child: BlocProvider(
-      create: (context) => SeekerBloc(context.read<SeekerRepo>()),
+      create: (context) => SeekerBloc(context.read<SeekerRepo>())..add(FetchBookings()),
       child: const BookingsSeeker(),
     ),
   ),

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../Models/category_model.dart';
 import '../Repository/provider_repo.dart';
 
 part 'provider_event.dart';

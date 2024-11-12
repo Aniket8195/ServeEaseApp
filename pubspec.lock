@@ -289,7 +289,7 @@ packages:
     source: hosted
     version: "2.1.4"
   path_provider_android:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider_android
       sha256: c464428172cb986b758c6d1724c603097febb8fb855aa265aeecc9280c294d4a

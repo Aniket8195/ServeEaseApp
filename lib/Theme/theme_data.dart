@@ -1,95 +1,106 @@
-
 import 'package:flutter/material.dart';
-import 'package:serve_ease/Theme/app_pallete.dart';
 
-
+class AppPalette {
+  static const Color primaryColor = Colors.teal;
+  static const Color secondaryColor = Colors.tealAccent;
+  static const Color backgroundColor = Color(0xFFF5F5F5);
+  static const Color textColor = Colors.black87;
+}
 
 class ThemeClass {
-  //Color primaryColor = Colors.white;
-
   static ThemeData themeData = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    primarySwatch: Colors.teal,
+    scaffoldBackgroundColor: AppPalette.backgroundColor,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor:
-        WidgetStateProperty.all<Color>(AppPallete.secondaryColor),
+        backgroundColor: WidgetStateProperty.all<Color>(AppPalette.primaryColor),
         foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(30),
           ),
+        ),
+        padding: WidgetStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
-        foregroundColor:
-        WidgetStateProperty.all<Color>(AppPallete.secondaryColor),
+        foregroundColor: WidgetStateProperty.all<Color>(AppPalette.primaryColor),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(30),
+            side: const BorderSide(color: AppPalette.primaryColor),
           ),
         ),
       ),
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppPallete.primaryColor,
-      selectedItemColor: AppPallete.secondaryColor,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedItemColor: AppPalette.primaryColor,
       unselectedItemColor: Colors.grey,
     ),
     radioTheme: RadioThemeData(
-      fillColor: WidgetStateProperty.all<Color>(AppPallete.secondaryColor),
+      fillColor: WidgetStateProperty.all<Color>(AppPalette.primaryColor),
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.all<Color>(Colors.white),
-      checkColor: WidgetStateProperty.all<Color>(AppPallete.secondaryColor),
+      fillColor: WidgetStateProperty.all<Color>(AppPalette.primaryColor),
+      checkColor: WidgetStateProperty.all<Color>(Colors.white),
     ),
     chipTheme: ChipThemeData(
-      //backgroundColor: const Color(0xFF004A00),
+      backgroundColor: Colors.grey[200],
       disabledColor: Colors.grey,
-      selectedColor: AppPallete.secondaryColor,
-      secondarySelectedColor: AppPallete.secondaryColor,
-      labelPadding: const EdgeInsets.all(8.0),
+      selectedColor: AppPalette.primaryColor,
+      secondarySelectedColor: AppPalette.secondaryColor,
       padding: const EdgeInsets.all(8.0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
       ),
-      labelStyle: const TextStyle(color: Colors.black),
+      labelStyle: const TextStyle(color: AppPalette.textColor),
       secondaryLabelStyle: const TextStyle(color: Colors.white),
       brightness: Brightness.light,
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.all<Color>(Colors.white),
-      trackColor: WidgetStateProperty.all<Color>(AppPallete.secondaryColor),
-      trackOutlineColor:
-      WidgetStateProperty.all<Color>(AppPallete.secondaryColor),
+      trackColor: WidgetStateProperty.all<Color>(AppPalette.primaryColor),
+      trackOutlineColor: WidgetStateProperty.all<Color>(AppPalette.primaryColor),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: AppPallete.secondaryColor,
+      backgroundColor: AppPalette.primaryColor,
       contentTextStyle: const TextStyle(color: Colors.white),
-      disabledActionBackgroundColor: Colors.grey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: AppPallete.secondaryColor,
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppPalette.primaryColor,
     ),
     inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white,
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppPallete.secondaryColor),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppPalette.primaryColor, width: 2),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppPallete.secondaryColor),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey[300]!),
       ),
-      errorBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.red),
       ),
-      focusedErrorBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.red, width: 2),
       ),
-      labelStyle: TextStyle(color: AppPallete.secondaryColor),
-
+      labelStyle: const TextStyle(color: AppPalette.primaryColor),
+      prefixIconColor: AppPalette.primaryColor,
     ),
     drawerTheme: const DrawerThemeData(
+      backgroundColor: Colors.white,
       elevation: 16,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -98,14 +109,26 @@ class ThemeClass {
         ),
       ),
     ),
-    tabBarTheme: TabBarTheme(
-      labelColor: AppPallete.secondaryColor,
+    tabBarTheme: const TabBarTheme(
+      labelColor: AppPalette.primaryColor,
       unselectedLabelColor: Colors.grey,
-      indicatorColor: AppPallete.secondaryColor,
+      indicator: UnderlineTabIndicator(
+        borderSide: BorderSide(color: AppPalette.primaryColor, width: 2),
+      ),
     ),
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: AppPallete.secondaryColor,
+      cursorColor: AppPalette.primaryColor,
+      selectionColor: AppPalette.secondaryColor.withOpacity(0.3),
+      selectionHandleColor: AppPalette.primaryColor,
     ),
-
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppPalette.primaryColor),
+      bodyMedium: TextStyle(fontSize: 16, color: AppPalette.textColor),
+    ),
+    colorScheme: const ColorScheme.light(
+      primary: AppPalette.primaryColor,
+      secondary: AppPalette.secondaryColor,
+      surface: AppPalette.backgroundColor,
+    ),
   );
 }
