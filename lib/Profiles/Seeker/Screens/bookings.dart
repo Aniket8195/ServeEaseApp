@@ -82,14 +82,13 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Provider ID: ${booking.providerId}',
+              'Category: ${booking.categoryName}',
               style: const TextStyle(
                 color: AppPallete.primaryTextColor,
-                fontWeight: FontWeight.bold,
                 fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
             Text(
               'Booking Date: ${booking.bookingDate.toLocal()}',
               style: const TextStyle(
@@ -99,7 +98,7 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Status: ${_getBookingStatus(booking)}',
+              'Status: ${booking.status}',
               style: TextStyle(
                 color: _getStatusColor(booking),
                 fontWeight: FontWeight.bold,
@@ -112,19 +111,12 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
     );
   }
 
-  // Helper method to get booking status (you might need to adjust this based on your model)
-  String _getBookingStatus(BookingModel booking) {
-    // Assuming you add a `status` property to BookingModel, you can return it here
-    // For now, returning dummy data:
-    return 'Pending'; // Change based on your logic
-  }
 
-  // Helper method to get status color
   Color _getStatusColor(BookingModel booking) {
-    final status = _getBookingStatus(booking);
-    if (status == 'Completed') {
+    final status = booking.status;
+    if (status == 'COMPLETE') {
       return AppPallete.successColor;
-    } else if (status == 'Cancelled') {
+    } else if (status == 'CANCELLED') {
       return AppPallete.errorColor;
     }
     return AppPallete.secondaryTextColor;

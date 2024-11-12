@@ -31,3 +31,16 @@ class BookingsFetched extends SeekerState {
   @override
   List<Object> get props => [tabIndex, bookings];
 }
+class CategoryServiceProviders extends SeekerState {
+  final int categoryID;
+  final List<ServiceProviderModel> serviceProviders;
+  final int userID;
+
+  const CategoryServiceProviders({required this.serviceProviders, required super.tabIndex, required this.categoryID, required this.userID});
+
+  @override
+  List<Object> get props => [tabIndex, serviceProviders, categoryID, userID];
+}
+class BookingDone extends SeekerState {
+  const BookingDone({required super.tabIndex});
+}

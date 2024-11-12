@@ -21,3 +21,20 @@ class FetchCategories extends SeekerEvent {
 class FetchBookings extends SeekerEvent {
   FetchBookings();
 }
+class CategorySelected extends SeekerEvent {
+  final int category;
+  CategorySelected({required this.category});
+
+  @override
+  List<Object> get props => [category];
+}
+class BookingEvent extends SeekerEvent {
+  final int providerID;
+  final int seekerID;
+  final int categoryID;
+  final DateTime dateTime;
+
+  BookingEvent({required this.providerID, required this.seekerID, required this.categoryID, required this.dateTime});
+  @override
+  List<Object> get props => [providerID, seekerID, categoryID, dateTime];
+}
