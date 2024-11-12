@@ -177,8 +177,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildRegisterLink(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return  Wrap(
+      alignment: WrapAlignment.center,
       children: [
         const Text(
           "Don't have an account? ",
@@ -198,5 +198,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ],
     );
+
   }
 }

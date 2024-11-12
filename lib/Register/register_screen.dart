@@ -198,10 +198,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildLoginLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return  Wrap(
+      alignment: WrapAlignment.center,
       children: [
-        const Text("Already have an account?", style: TextStyle(color: AppPallete.secondaryTextColor)),
+        const Text(
+          "Already have an account? ",
+          style: TextStyle(color: AppPallete.secondaryTextColor),
+        ),
         TextButton(
           onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
           child: const Text(
@@ -214,6 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ],
     );
+
   }
 
   void _handleRegistration() {

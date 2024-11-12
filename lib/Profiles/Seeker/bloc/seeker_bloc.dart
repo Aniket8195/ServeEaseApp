@@ -12,13 +12,13 @@ part 'seeker_state.dart';
 class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
   SeekerRepo seekerRepo;
   SeekerBloc(this.seekerRepo) : super(const SeekerInitial(tabIndex: 0)) {
-    on<SeekerEvent>((event, emit) {
+    on<SeekerEvent>((event, emit)async {
       if (event is TabChanged) {
         emit(SeekerInitial(tabIndex: event.tabIndex));
       } else if (event is FetchCategories) {
-        _fetchCategories(emit);
+        await  _fetchCategories(emit);
       } else if (event is FetchBookings) {
-        _fetchBookings(emit);
+        await  _fetchBookings(emit);
       }
     });
   }
