@@ -21,6 +21,10 @@ class AppPallete {
   static const Color disabledColor = Color(0xFFCAC4D0);
   static const Color borderColor = Color(0xFFE0E0E0);
 
+  static const Color cancelButtonColor = Color(0xFFB3261E);
+  static const Color confirmButtonColor = Color(0xFF004A00);
+
+
   // Button colors
   static Color get elevatedButtonColor => primaryColor;
   static Color get elevatedButtonTextColor => Colors.white;

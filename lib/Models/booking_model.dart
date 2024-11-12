@@ -1,30 +1,30 @@
 class BookingModel {
-  final int bookingId;
-  final String categoryName;
-  final String status;
+  final int providerId;
+  final int seekerId;
+  final int categoryId;
   final DateTime bookingDate;
 
   BookingModel({
-    required this.bookingId,
-    required this.categoryName,
-    required this.status,
+    required this.providerId,
+    required this.seekerId,
+    required this.categoryId,
     required this.bookingDate,
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     return BookingModel(
-      bookingId: json['bookingId'],
-      categoryName: json['categoryName'],
-      status: json['status'],
+      providerId: json['providerId'],
+      seekerId: json['seekerId'],
+      categoryId: json['categoryId'],
       bookingDate: DateTime.parse(json['bookingDate']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'bookingId': bookingId,
-      'categoryName': categoryName,
-      'status': status,
+      'providerId': providerId,
+      'seekerId': seekerId,
+      'categoryId': categoryId,
       'bookingDate': bookingDate.toIso8601String(),
     };
   }
