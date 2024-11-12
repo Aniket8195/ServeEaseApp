@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:serve_ease/Models/booking_model.dart';
 import 'package:serve_ease/Profiles/Provider/bloc/provider_bloc.dart';
 import 'package:serve_ease/Theme/app_pallete.dart';
 
@@ -10,23 +11,42 @@ class BookingsProvider extends StatefulWidget {
   State<BookingsProvider> createState() => _BookingsProviderState();
 }
 
-class _BookingsProviderState extends State<BookingsProvider> {
+class _BookingsProviderState extends State<BookingsProvider>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
-    // Trigger fetching bookings when the screen is first loaded
+    _tabController = TabController(length: 3, vsync: this);
     context.read<ProviderBloc>().add(FetchBookings());
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProviderBloc, ProviderState>(
       listener: (context, state) {
-        // Add any necessary listener logic here
+        if (state is ProviderError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${state.errorMessage}')),
+          );
+        }
+        if (state is BookingActionSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Action completed successfully')),
+          );
+          // Refresh bookings after action is performed
+          context.read<ProviderBloc>().add(FetchBookings());
+        }
       },
       builder: (context, state) {
         if (state is BookingsFetched) {
-          // If bookings are fetched successfully, show them
           return Scaffold(
             backgroundColor: AppPallete.backgroundColor,
             appBar: AppBar(
@@ -39,23 +59,26 @@ class _BookingsProviderState extends State<BookingsProvider> {
               ),
               backgroundColor: AppPallete.surfaceColor,
               elevation: 0,
-            ),
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListView.builder(
-                  itemCount: state.bookings.length,
-                  itemBuilder: (context, index) {
-                    final booking = state.bookings[index];
-                    return _buildBookingCard(booking as Map<String, dynamic>);
-                  },
-                ),
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(text: 'Pending'),
+                  Tab(text: 'Confirmed'),
+                  Tab(text: 'Completed'),
+                ],
               ),
+            ),
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildBookingList(state.pendingBookings, 'pending'),
+                _buildBookingList(state.confirmedBookings, 'confirmed'),
+                _buildBookingList(state.completedBookings, 'completed'),
+              ],
             ),
           );
         }
 
-        // If the state is loading, show a loading spinner
         if (state is ProviderLoading) {
           return const Center(
             child: CircularProgressIndicator(
@@ -64,7 +87,6 @@ class _BookingsProviderState extends State<BookingsProvider> {
           );
         }
 
-        // Show error state if bookings cannot be fetched
         if (state is ProviderError) {
           return Center(
             child: Text(
@@ -85,12 +107,17 @@ class _BookingsProviderState extends State<BookingsProvider> {
     );
   }
 
-  Widget _buildBookingCard(Map<String, dynamic> booking) {
-    final providerId = booking['providerId'];
-    final seekerId = booking['seekerId'];
-    final categoryId = booking['categoryId'];
-    final bookingDate = booking['bookingDate']; // Ensure correct format is maintained
+  Widget _buildBookingList(List<BookingModel> bookings, String status) {
+    return ListView.builder(
+      itemCount: bookings.length,
+      itemBuilder: (context, index) {
+        final booking = bookings[index];
+        return _buildBookingCard(booking, status);
+      },
+    );
+  }
 
+  Widget _buildBookingCard(BookingModel booking, String status) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 16),
@@ -102,43 +129,66 @@ class _BookingsProviderState extends State<BookingsProvider> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoRow('Provider ID:', providerId.toString()),
+            _buildInfoRow('Category:', booking.categoryName),
             const SizedBox(height: 8),
-            _buildInfoRow('Seeker ID:', seekerId.toString()),
+            _buildInfoRow('Status:', booking.status),
             const SizedBox(height: 8),
-            _buildInfoRow('Category ID:', categoryId.toString()),
-            const SizedBox(height: 8),
-            _buildInfoRow('Booking Date:', bookingDate),
+            _buildInfoRow('Booking Date:', booking.bookingDate.toString()),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppPallete.cancelButtonColor,
-                    textStyle: const TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    // Handle cancellation logic here
-                  },
-                  child: const Text('Cancel'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppPallete.confirmButtonColor,
-                    textStyle: const TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    // Handle confirmation logic here
-                  },
-                  child: const Text('Confirm'),
-                ),
-              ],
-            ),
+            if (status == 'pending') _buildPendingActions(booking.bookingId),
+            if (status == 'confirmed') _buildConfirmedActions(booking.bookingId),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPendingActions(int bookingId) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppPallete.cancelButtonColor,
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            // Handle cancellation logic here
+            context.read<ProviderBloc>().add(CancelBooking(bookingId: bookingId));
+          },
+          child: const Text('Cancel'),
+        ),
+        const SizedBox(width: 16),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppPallete.confirmButtonColor,
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            // Handle confirmation logic here
+            context.read<ProviderBloc>().add(ConfirmBooking(bookingId: bookingId));
+          },
+          child: const Text('Confirm'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfirmedActions(int bookingId) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            // Handle completion logic here
+            context.read<ProviderBloc>().add(CompleteBooking(bookingId: bookingId));
+          },
+          child: const Text('Completed'),
+        ),
+      ],
     );
   }
 

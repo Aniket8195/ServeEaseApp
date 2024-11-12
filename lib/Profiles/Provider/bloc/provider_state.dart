@@ -26,11 +26,14 @@ class ProviderLoading extends ProviderState {
 // Success state when data (bookings) is fetched successfully
 class BookingsFetched extends ProviderState {
   final List<dynamic> bookings;
+  final List<BookingModel>pendingBookings;
+  final List<BookingModel>confirmedBookings;
+  final List<BookingModel>completedBookings;
 
-  const BookingsFetched({required this.bookings, super.tabIndex});
+  const BookingsFetched({required this.bookings, super.tabIndex,required this.pendingBookings,required this.confirmedBookings,required this.completedBookings});
 
   @override
-  List<Object> get props => [tabIndex, bookings];
+  List<Object> get props => [tabIndex, bookings,pendingBookings,confirmedBookings,completedBookings];
 }
 
 // Error state when something goes wrong during fetching data
@@ -41,4 +44,12 @@ class ProviderError extends ProviderState {
 
   @override
   List<Object> get props => [tabIndex, errorMessage];
+}
+class BookingActionSuccess extends ProviderState {
+
+
+  const BookingActionSuccess({super.tabIndex});
+
+  @override
+  List<Object> get props => [tabIndex];
 }
