@@ -24,16 +24,25 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
   }
 
   Future<void> _fetchCategories(Emitter<SeekerState> emit) async {
-    final response = await MainInstance().dio.get('http://localhost:8080/category/all');
-    final List<dynamic> data = response.data['data'];
-    List<CategoryModel> categories = data.map((e) => CategoryModel.fromJson(e)).toList();
-    emit(FetchedCategories(categories: categories, tabIndex: 0));
+   try{
+     final response = await MainInstance().dio.get('http://localhost:8080/category/all');
+     final List<dynamic> data = response.data['data'];
+     List<CategoryModel> categories = data.map((e) => CategoryModel.fromJson(e)).toList();
+     emit(FetchedCategories(categories: categories, tabIndex: 0));
+   }catch(e){
+     print(e.toString());
+     //emit(FetchCategoriesFailed(tabIndex: 0));
+   }
   }
 
   Future<void> _fetchBookings(Emitter<SeekerState> emit) async {
-    final response = await MainInstance().dio.get('http://localhost:8080/booking/seeker');
-    final List<dynamic> data = response.data['data'];
-    List<BookingModel> bookings = data.map((e) => BookingModel.fromJson(e)).toList();
-    emit(BookingsFetched(bookings: bookings, tabIndex: 0));
+    try{
+      final response = await MainInstance().dio.get('http://localhost:8080/booking/seeker');
+      final List<dynamic> data = response.data['data'];
+      List<BookingModel> bookings = data.map((e) => BookingModel.fromJson(e)).toList();
+      emit(BookingsFetched(bookings: bookings, tabIndex: 0));
+    }catch(e){
+      print(e.toString());
+    }
   }
 }
