@@ -44,3 +44,17 @@ class CompleteBooking extends ProviderEvent {
   @override
   List<Object> get props => [bookingId];
 }
+
+class AddReview extends ProviderEvent {
+  final int seekerId;
+  final int providerId;
+  final double rating;
+  final String comment;
+  final bool seekerReview;
+  final int bookingId;
+
+  AddReview({required this.bookingId,required this.rating,required this.comment,required this.seekerReview,required this.seekerId,required this.providerId});
+
+  @override
+  List<Object> get props => [bookingId,rating,comment,seekerReview,seekerId,providerId];
+}

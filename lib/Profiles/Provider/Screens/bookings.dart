@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_ease/Models/booking_model.dart';
 import 'package:serve_ease/Profiles/Provider/bloc/provider_bloc.dart';
 import 'package:serve_ease/Theme/app_pallete.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class BookingsProvider extends StatefulWidget {
   const BookingsProvider({super.key});
@@ -43,6 +44,13 @@ class _BookingsProviderState extends State<BookingsProvider>
           );
           // Refresh bookings after action is performed
           context.read<ProviderBloc>().add(FetchBookings());
+        }
+        if(state is RatingActionSuccess){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Action completed successfully')),
+          );
+          context.read<ProviderBloc>().add(FetchBookings());
+
         }
       },
       builder: (context, state) {
@@ -136,12 +144,90 @@ class _BookingsProviderState extends State<BookingsProvider>
             _buildInfoRow('Booking Date:', booking.bookingDate.toString()),
             const SizedBox(height: 16),
             if (status == 'pending') _buildPendingActions(booking.bookingId),
-            if (status == 'confirmed') _buildConfirmedActions(booking.bookingId),
+            if (status == 'confirmed') _buildConfirmedActions(booking.bookingId,booking.rating),
+            if (status=='completed')_buildCompletedActions(booking.bookingId,booking.rating,booking),
           ],
         ),
       ),
     );
   }
+ Widget _buildCompletedActions (int bookingId, double rating, BookingModel booking) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        rating==0?ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppPallete.primaryColor,
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            // Handle rating logic here
+              showReviewAlert(context, booking);
+          },
+          child: const Text('Rate'),
+        ): Text('Rating:$rating',style: TextStyle(color: AppPallete.primaryTextColor,fontWeight: FontWeight.bold),),
+      ],
+    );
+
+ }
+
+  void showReviewAlert(BuildContext parentContext, BookingModel booking) {
+    double userRating = booking.rating ?? 0.0;
+    TextEditingController commentController = TextEditingController();
+
+    showDialog(
+      context: parentContext,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text('Review'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Category: ${booking.categoryName}'),
+              Text('Booking Date: ${booking.bookingDate}'),
+              SizedBox(height: 20),
+              Text('Rating:'),
+              RatingBar.builder(
+                initialRating: userRating,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 10,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  userRating = rating;
+                },
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: commentController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your review',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                String comment = commentController.text;
+                // Save or submit the rating and comment
+                print('Rating: $userRating, Comment: $comment');
+               BlocProvider.of<ProviderBloc>(parentContext).add(AddReview(bookingId: booking.bookingId, rating: userRating, comment: comment, seekerReview: false, seekerId: booking.seekerId, providerId: booking.providerId));
+                Navigator.of(dialogContext).pop();
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   Widget _buildPendingActions(int bookingId) {
     return Row(
@@ -174,7 +260,7 @@ class _BookingsProviderState extends State<BookingsProvider>
     );
   }
 
-  Widget _buildConfirmedActions(int bookingId) {
+  Widget _buildConfirmedActions(int bookingId, double rating) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -188,6 +274,17 @@ class _BookingsProviderState extends State<BookingsProvider>
           },
           child: const Text('Completed'),
         ),
+        // const SizedBox(width: 16),
+        // rating==0?ElevatedButton(
+        //   style: ElevatedButton.styleFrom(
+        //     backgroundColor: AppPallete.primaryColor,
+        //     textStyle: const TextStyle(color: Colors.white),
+        //   ),
+        //   onPressed: () {
+        //     // Handle rating logic here
+        //   },
+        //   child: const Text('Rate'),
+        // ): Text('Rating:$rating',style: TextStyle(color: AppPallete.primaryTextColor,fontWeight: FontWeight.bold),),
       ],
     );
   }

@@ -25,6 +25,8 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
         await  _fetchBookings(emit);
       }
     });
+
+
     on<CategorySelected> ((event, emit)async {
       String categroryProvidersUrl='http://localhost:8080/category/${event.category}';
       final response=await MainInstance().dio.get(categroryProvidersUrl);
@@ -35,6 +37,18 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
       event.category,userID: userID
       ));
     });
+    Future<void> _addReview(AddReview event, Emitter<SeekerState> emit) async {
+      try {
+        await seekerRepo.addReview(event.bookingId, event.rating, event.comment, event.seekerReview, event.seekerId, event.providerId);
+        emit(ReviewAdded(tabIndex: 0));
+      } catch (error) {
+        print(error.toString());
+      }
+    }
+      on<AddReview>((event, emit) async {
+        await _addReview(event, emit);
+      });
+
     on<BookingEvent>((event, emit) async{
       final response = await MainInstance().dio.post('http://localhost:8080/booking/add', data: {
         'providerId': event.providerID,

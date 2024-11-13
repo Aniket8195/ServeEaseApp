@@ -3,12 +3,18 @@ class BookingModel {
   final String categoryName;
   final String status;
   final DateTime bookingDate;
+  final double rating;
+  final int providerId;
+  final int seekerId;
 
   BookingModel({
     required this.bookingId,
     required this.categoryName,
     required this.status,
     required this.bookingDate,
+    required this.rating,
+    required this.providerId,
+    required this.seekerId,
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -17,6 +23,9 @@ class BookingModel {
       categoryName: json['categoryName'],
       status: json['status'],
       bookingDate: DateTime.parse(json['bookingDate']),
+      rating: json['rating'],
+      providerId: json['providerId'],
+      seekerId: json['seekerId'],
     );
   }
 
@@ -26,6 +35,7 @@ class BookingModel {
       'categoryName': categoryName,
       'status': status,
       'bookingDate': bookingDate.toIso8601String(),
+      'rating': rating,
     };
   }
 }

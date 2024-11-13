@@ -53,3 +53,10 @@ class BookingActionSuccess extends ProviderState {
   @override
   List<Object> get props => [tabIndex];
 }
+class RatingActionSuccess extends ProviderState {
+
+  const RatingActionSuccess({super.tabIndex});
+
+  @override
+  List<Object> get props => [tabIndex];
+}

@@ -44,3 +44,6 @@ class CategoryServiceProviders extends SeekerState {
 class BookingDone extends SeekerState {
   const BookingDone({required super.tabIndex});
 }
+class ReviewAdded extends SeekerState {
+  const ReviewAdded({required super.tabIndex});
+}

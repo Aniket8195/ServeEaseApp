@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_ease/Models/booking_model.dart';
 import 'package:serve_ease/Profiles/Seeker/bloc/seeker_bloc.dart';
 import 'package:serve_ease/Theme/app_pallete.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class BookingsSeeker extends StatefulWidget {
   const BookingsSeeker({super.key});
@@ -26,6 +27,15 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
     return BlocConsumer<SeekerBloc, SeekerState>(
       listener: (context, state) {
         // Add any necessary listener logic here
+        if(state is ReviewAdded){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Review added successfully'),
+            ),
+          );
+          context.read<SeekerBloc>().add(FetchBookings());
+
+        }
       },
       builder: (context, state) {
         if (state is BookingsFetched) {
@@ -105,12 +115,80 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
                 fontSize: 14,
               ),
             ),
+            const SizedBox(height: 8),
+            booking.status == 'COMPLETED'
+                ? Row(
+                  children: [
+                   ElevatedButton(onPressed: (){
+                      showReviewAlert(context, booking);
+                     },
+                    child: Text("Rate"),)
+              ],
+            ):Container(),
           ],
         ),
       ),
     );
   }
 
+  void showReviewAlert(BuildContext parentContext, BookingModel booking) {
+    double userRating = booking.rating ?? 0.0;
+    TextEditingController commentController = TextEditingController();
+
+    showDialog(
+      context: parentContext,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text('Review'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Category: ${booking.categoryName}'),
+              Text('Booking Date: ${booking.bookingDate}'),
+              SizedBox(height: 20),
+              Text('Rating:'),
+              RatingBar.builder(
+                initialRating: userRating,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 10,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  userRating = rating;
+                },
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: commentController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your review',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                String comment = commentController.text;
+                // Save or submit the rating and comment
+                print('Rating: $userRating, Comment: $comment');
+
+                //BlocProvider.of<ProviderBloc>(parentContext).add(AddReview(bookingId: booking.bookingId, rating: userRating, comment: comment, seekerReview: false, seekerId: booking.seekerId, providerId: booking.providerId));
+                BlocProvider.of<SeekerBloc>(parentContext).add(AddReview(bookingId: booking.bookingId, rating: userRating, comment: comment, seekerReview: true, seekerId: booking.seekerId, providerId: booking.providerId));
+                Navigator.of(dialogContext).pop();
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Color _getStatusColor(BookingModel booking) {
     final status = booking.status;

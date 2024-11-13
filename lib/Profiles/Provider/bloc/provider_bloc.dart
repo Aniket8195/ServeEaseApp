@@ -19,8 +19,17 @@ class ProviderBloc extends Bloc<ProviderEvent, ProviderState> {
     on<CancelBooking> (_onCancelBooking);
     on<ConfirmBooking>(_onConfirmBooking);
     on<CompleteBooking>(_onCompleteBooking);
+    on<AddReview>(_onAddReview);
   }
 
+  Future<void> _onAddReview(AddReview event, Emitter<ProviderState> emit) async {
+    try {
+      await providerRepo.addReview(event.bookingId, event.rating, event.comment, event.seekerReview, event.seekerId, event.providerId);
+      emit(const RatingActionSuccess());
+    } catch (error) {
+      emit(ProviderError(errorMessage: error.toString()));
+    }
+  }
   Future<void> _onCancelBooking(CancelBooking event, Emitter<ProviderState> emit) async {
     try {
       await providerRepo.cancelBooking(event.bookingId);
