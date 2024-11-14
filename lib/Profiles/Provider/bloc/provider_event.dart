@@ -58,3 +58,6 @@ class AddReview extends ProviderEvent {
   @override
   List<Object> get props => [bookingId,rating,comment,seekerReview,seekerId,providerId];
 }
+class FetchProfile extends ProviderEvent {
+  FetchProfile();
+}

@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:serve_ease/Splash/Repository/splash_repo.dart';
 import '../../../API/dio_instance.dart';
 import '../../../Models/booking_model.dart';
+import '../../../Models/profile_model.dart';
 import '../Repository/provider_repo.dart';
 
 part 'provider_event.dart';
@@ -20,6 +21,23 @@ class ProviderBloc extends Bloc<ProviderEvent, ProviderState> {
     on<ConfirmBooking>(_onConfirmBooking);
     on<CompleteBooking>(_onCompleteBooking);
     on<AddReview>(_onAddReview);
+    on<FetchProfile>(_onFetchProfile);
+  }
+
+  Future<void> _onFetchProfile(FetchProfile event, Emitter<ProviderState> emit) async {
+    emit(const ProviderLoading()); // Emit loading state while fetching profile
+
+    try {
+      print("fetching profile");
+      int userID=await SplashRepo().getId();
+      final response = await MainInstance().dio.get('http://localhost:8080/user/profile/$userID');
+      final data = response.data['user'];
+      UserProfile userProfile = UserProfile.fromJson(data);
+      emit(ProfileFetched(userProfile: userProfile));
+    } catch (error) {
+      // Emit error state if fetching fails
+      emit(ProviderError(errorMessage: error.toString()));
+    }
   }
 
   Future<void> _onAddReview(AddReview event, Emitter<ProviderState> emit) async {

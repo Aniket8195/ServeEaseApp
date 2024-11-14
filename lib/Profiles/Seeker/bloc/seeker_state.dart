@@ -47,3 +47,11 @@ class BookingDone extends SeekerState {
 class ReviewAdded extends SeekerState {
   const ReviewAdded({required super.tabIndex});
 }
+class ProfileFetched extends SeekerState {
+  final UserProfile userProfile;
+
+  const ProfileFetched({required this.userProfile, required super.tabIndex});
+
+  @override
+  List<Object> get props => [tabIndex, userProfile];
+}

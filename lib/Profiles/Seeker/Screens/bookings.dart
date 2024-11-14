@@ -118,13 +118,22 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
             const SizedBox(height: 8),
             booking.status == 'COMPLETED'
                 ? Row(
-                  children: [
-                   ElevatedButton(onPressed: (){
-                      showReviewAlert(context, booking);
-                     },
-                    child: Text("Rate"),)
+              children: [
+                booking.rating == 0
+                    ? ElevatedButton(
+                  onPressed: () {
+                    showReviewAlert(context, booking);
+                  },
+                  child: Text("Rate"),
+                )
+                    : Text(
+                  "Rating: ${booking.rating}",
+                  style: TextStyle(fontSize: 16),
+                ),
               ],
-            ):Container(),
+            )
+                : Container(),
+
           ],
         ),
       ),

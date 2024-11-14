@@ -7,6 +7,7 @@ import 'package:serve_ease/Models/category_model.dart';
 import 'package:serve_ease/Profiles/Seeker/Repository/seeker_repo.dart';
 import 'package:serve_ease/Splash/Repository/splash_repo.dart';
 
+import '../../../Models/profile_model.dart';
 import '../../../Models/service_providers.dart';
 
 part 'seeker_event.dart';
@@ -62,6 +63,14 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
         print('Failed to book');
       }
 
+    });
+    on<FetchProfile> ((event, emit)async {
+      print('fetching profile');
+      int userID=await SplashRepo().getId();
+      final response = await MainInstance().dio.get('http://localhost:8080/user/profile/$userID');
+      final data = response.data['user'];
+      UserProfile userProfile = UserProfile.fromJson(data);
+      emit(ProfileFetched(userProfile: userProfile, tabIndex: 0));
     });
   }
 

@@ -41,7 +41,7 @@ List<Widget> bottomNavScreens = <Widget>[
   RepositoryProvider(
     create: (context) => SeekerRepo(),
     child: BlocProvider(
-      create: (context) => SeekerBloc(context.read<SeekerRepo>()),
+      create: (context) => SeekerBloc(context.read<SeekerRepo>())..add(FetchProfile()),
       child: const ProfileSeeker(),
     ),
   ),

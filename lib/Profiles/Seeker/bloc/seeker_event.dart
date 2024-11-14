@@ -52,3 +52,7 @@ class AddReview extends SeekerEvent {
   @override
   List<Object> get props => [bookingId,rating,comment,seekerReview,seekerId,providerId];
 }
+
+class FetchProfile extends SeekerEvent {
+  FetchProfile();
+}

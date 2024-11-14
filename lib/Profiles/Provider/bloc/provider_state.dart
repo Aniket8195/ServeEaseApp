@@ -60,3 +60,11 @@ class RatingActionSuccess extends ProviderState {
   @override
   List<Object> get props => [tabIndex];
 }
+class ProfileFetched extends ProviderState {
+  final UserProfile userProfile;
+
+  const ProfileFetched({required this.userProfile, super.tabIndex});
+
+  @override
+  List<Object> get props => [tabIndex, userProfile];
+}
