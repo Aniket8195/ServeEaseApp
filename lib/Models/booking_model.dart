@@ -6,6 +6,7 @@ class BookingModel {
   final double rating;
   final int providerId;
   final int seekerId;
+  final bool paid;
 
   BookingModel({
     required this.bookingId,
@@ -15,6 +16,7 @@ class BookingModel {
     required this.rating,
     required this.providerId,
     required this.seekerId,
+    required this.paid,
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class BookingModel {
       rating: json['rating'],
       providerId: json['providerId'],
       seekerId: json['seekerId'],
+      paid: json['paid'],
     );
   }
 

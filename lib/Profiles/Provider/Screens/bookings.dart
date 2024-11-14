@@ -166,6 +166,16 @@ class _BookingsProviderState extends State<BookingsProvider>
           },
           child: const Text('Rate'),
         ): Text('Rating:$rating',style: TextStyle(color: AppPallete.primaryTextColor,fontWeight: FontWeight.bold),),
+        booking.paid==true?
+        Text(
+          'Paid',
+          style: TextStyle(
+            color: AppPallete.successColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        )
+            : Container(),
       ],
     );
 

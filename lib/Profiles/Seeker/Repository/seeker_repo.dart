@@ -12,4 +12,13 @@ class SeekerRepo{
               'seekerReview':seekerReview
           });
       }
+
+   Future<void>completePayment(int bookingID, double amount)async{
+       String url='http://localhost:8080/payment/add';
+       await MainInstance().dio.post(url,data: {
+           'amount':amount,
+            'bookingId':bookingID,
+       });
+
+    }
 }

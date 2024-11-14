@@ -55,3 +55,6 @@ class ProfileFetched extends SeekerState {
   @override
   List<Object> get props => [tabIndex, userProfile];
 }
+class PaymentDone extends SeekerState {
+  const PaymentDone({required super.tabIndex});
+}

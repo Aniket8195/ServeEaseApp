@@ -26,7 +26,14 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
         await  _fetchBookings(emit);
       }
     });
-
+    on<CompletePayment> ((event, emit)async {
+      try{
+        await seekerRepo.completePayment(event.bookingID, event.amount);
+        emit(PaymentDone(tabIndex: 0));
+      }catch(e){
+        print(e.toString());
+      }
+    });
 
     on<CategorySelected> ((event, emit)async {
       String categroryProvidersUrl='http://localhost:8080/category/${event.category}';

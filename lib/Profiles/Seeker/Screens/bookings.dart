@@ -36,6 +36,15 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
           context.read<SeekerBloc>().add(FetchBookings());
 
         }
+        if(state is PaymentDone){
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Payment done successfully'),
+            ),
+          );
+          context.read<SeekerBloc>().add(FetchBookings());
+        }
       },
       builder: (context, state) {
         if (state is BookingsFetched) {
@@ -133,10 +142,83 @@ class _BookingsSeekerState extends State<BookingsSeeker> {
               ],
             )
                 : Container(),
+            const SizedBox(height: 8),
+            booking.status == 'COMPLETED' && booking.paid==false
+                ? Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //BlocProvider.of<ProviderBloc>(context).add(CompleteBooking(bookingId: booking.bookingId));
+                   // BlocProvider.of<SeekerBloc>(context).add(CompletePayment(bookingId: booking.bookingId));
+                    showPaymentAlert(context, booking);
+                  },
+                  child: Text("Pay"),
+                ),
+              ],
+            )
+                : Container(),
 
+            const SizedBox(height: 8),
+            booking.paid==true
+                ? Text(
+              'Paid',
+              style: TextStyle(
+                color: AppPallete.successColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            )
+                : Container(),
           ],
         ),
       ),
+    );
+  }
+  void showPaymentAlert(BuildContext parentContext, BookingModel booking) {
+    final TextEditingController amountController = TextEditingController();
+
+    showDialog(
+      context: parentContext,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text('Payment'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Category: ${booking.categoryName}'),
+              Text('Booking Date: ${booking.bookingDate}'),
+              SizedBox(height: 20),
+              TextField(
+                controller: amountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Enter Amount',
+                  hintText: 'Amount to Pay',
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  final enteredAmount = double.tryParse(amountController.text);
+                  if (enteredAmount != null && enteredAmount > 0) {
+
+                    BlocProvider.of<SeekerBloc>(parentContext).add(
+                      CompletePayment(bookingID: booking.bookingId, amount: enteredAmount),
+                    );
+                    Navigator.of(dialogContext).pop();
+                  } else {
+
+                    ScaffoldMessenger.of(parentContext).showSnackBar(
+                      SnackBar(content: Text('Please enter a valid amount')),
+                    );
+                  }
+                },
+                child: Text('Pay'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

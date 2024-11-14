@@ -56,3 +56,10 @@ class AddReview extends SeekerEvent {
 class FetchProfile extends SeekerEvent {
   FetchProfile();
 }
+class CompletePayment extends SeekerEvent{
+  final int bookingID;
+  final double amount;
+  CompletePayment({required this.bookingID,required this.amount});
+  @override
+  List<Object> get props => [bookingID,amount];
+}
