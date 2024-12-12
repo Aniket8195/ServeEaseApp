@@ -302,20 +302,24 @@ class _BookingsProviderState extends State<BookingsProvider>
   Widget _buildInfoRow(String label, String value) {
     return Row(
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppPallete.primaryTextColor,
+        Flexible(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppPallete.primaryTextColor,
+            ),
           ),
         ),
         const SizedBox(width: 8),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppPallete.secondaryTextColor,
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              color: AppPallete.secondaryTextColor,
+            ),
           ),
         ),
       ],

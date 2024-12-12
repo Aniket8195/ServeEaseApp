@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:serve_ease/Splash/Repository/splash_repo.dart';
+import '../../../API/api_url.dart';
 import '../../../API/dio_instance.dart';
 import '../../../Models/booking_model.dart';
 import '../../../Models/profile_model.dart';
@@ -30,7 +31,7 @@ class ProviderBloc extends Bloc<ProviderEvent, ProviderState> {
     try {
       print("fetching profile");
       int userID=await SplashRepo().getId();
-      final response = await MainInstance().dio.get('http://localhost:8080/user/profile/$userID');
+      final response = await MainInstance().dio.get('$instance/user/profile/$userID');
       final data = response.data['user'];
       UserProfile userProfile = UserProfile.fromJson(data);
       emit(ProfileFetched(userProfile: userProfile));
@@ -82,7 +83,7 @@ class ProviderBloc extends Bloc<ProviderEvent, ProviderState> {
 
     try {
       int id=await SplashRepo().getId();
-      String urlB='http://localhost:8080/booking/provider/$id';
+      String urlB='$instance/booking/provider/$id';
       final response = await MainInstance().dio.get(urlB);
       final List<dynamic> data = response.data['data'];
       List<BookingModel> bookings = data.map((e) => BookingModel.fromJson(e)).toList();

@@ -1,5 +1,5 @@
-const instance= 'http://localhost:8080';
-
+// const instance= 'http://localhost:8080';
+const instance= 'http://192.168.1.118:8080';
 
 //seeker login
 const seekerLogin = '$instance/serviceSeeker/login';

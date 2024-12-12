@@ -9,9 +9,10 @@ import 'package:serve_ease/Splash/Repository/splash_repo.dart';
 
 import '../../../Models/profile_model.dart';
 import '../../../Models/service_providers.dart';
-
+import "package:serve_ease/API/api_url.dart";
 part 'seeker_event.dart';
 part 'seeker_state.dart';
+
 
 class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
   SeekerRepo seekerRepo;
@@ -36,7 +37,7 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
     });
 
     on<CategorySelected> ((event, emit)async {
-      String categroryProvidersUrl='http://localhost:8080/category/${event.category}';
+      String categroryProvidersUrl='$instance/category/${event.category}';
       final response=await MainInstance().dio.get(categroryProvidersUrl);
       final List<dynamic> data = response.data['data'];
       List<ServiceProviderModel> serviceProviders = data.map((e) => ServiceProviderModel.fromJson(e)).toList();
@@ -58,7 +59,7 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
       });
 
     on<BookingEvent>((event, emit) async{
-      final response = await MainInstance().dio.post('http://localhost:8080/booking/add', data: {
+      final response = await MainInstance().dio.post('$instance/booking/add', data: {
         'providerId': event.providerID,
         'seekerId': event.seekerID,
         'categoryId': event.categoryID,
@@ -74,7 +75,7 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
     on<FetchProfile> ((event, emit)async {
       print('fetching profile');
       int userID=await SplashRepo().getId();
-      final response = await MainInstance().dio.get('http://localhost:8080/user/profile/$userID');
+      final response = await MainInstance().dio.get('$instance/user/profile/$userID');
       final data = response.data['user'];
       UserProfile userProfile = UserProfile.fromJson(data);
       emit(ProfileFetched(userProfile: userProfile, tabIndex: 0));
@@ -83,7 +84,7 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
 
   Future<void> _fetchCategories(Emitter<SeekerState> emit) async {
    try{
-     final response = await MainInstance().dio.get('http://localhost:8080/category/all');
+     final response = await MainInstance().dio.get('$instance/category/all');
      final List<dynamic> data = response.data['data'];
      List<CategoryModel> categories = data.map((e) => CategoryModel.fromJson(e)).toList();
      emit(FetchedCategories(categories: categories, tabIndex: 0));
@@ -96,7 +97,7 @@ class SeekerBloc extends Bloc<SeekerEvent, SeekerState> {
   Future<void> _fetchBookings(Emitter<SeekerState> emit) async {
     try{
       int userID=await SplashRepo().getId();
-      String url='http://localhost:8080/booking/seeker/$userID';
+      String url='$instance/booking/seeker/$userID';
       final response = await MainInstance().dio.get(url);
       final List<dynamic> data = response.data['data'];
       List<BookingModel> bookings = data.map((e) => BookingModel.fromJson(e)).toList();
