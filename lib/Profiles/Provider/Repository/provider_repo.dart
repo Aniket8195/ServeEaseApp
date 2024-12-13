@@ -11,7 +11,7 @@ class ProviderRepo{
         await MainInstance().dio.put(url);
     }
     Future<void>completeBooking(int id)async{
-        String url='$instance/complete/$id';
+        String url='$instance/booking/complete/$id';
         await MainInstance().dio.put(url);
     }
     Future<void>addReview(int bookingId,double rating,String comment,bool seekerReview, int seekerId,int providerId)async{

@@ -8,10 +8,10 @@ import 'package:serve_ease/Profiles/Provider/Screens/profile.dart';
 import 'package:serve_ease/Profiles/Provider/bloc/provider_bloc.dart';
 
 List<NavigationDestination> bottomNav = const <NavigationDestination>[
-  NavigationDestination(
-    label: 'Home',
-    icon: Icon(Icons.home),
-  ),
+  // NavigationDestination(
+  //   label: 'Home',
+  //   icon: Icon(Icons.home),
+  // ),
   NavigationDestination(
     label: 'Bookings',
     icon: Icon(Icons.book),
@@ -23,13 +23,13 @@ List<NavigationDestination> bottomNav = const <NavigationDestination>[
 ];
 
 List<Widget> bottomNavScreens = <Widget>[
-  RepositoryProvider(
-    create: (context) => ProviderRepo(),
-    child: BlocProvider(
-      create: (context) => ProviderBloc(context.read<ProviderRepo>()),
-      child: const HomeScreenProvider(),
-    ),
-  ),
+  // RepositoryProvider(
+  //   create: (context) => ProviderRepo(),
+  //   child: BlocProvider(
+  //     create: (context) => ProviderBloc(context.read<ProviderRepo>()),
+  //     child: const HomeScreenProvider(),
+  //   ),
+  // ),
   RepositoryProvider(
     create: (context) => ProviderRepo(),
     child: BlocProvider(

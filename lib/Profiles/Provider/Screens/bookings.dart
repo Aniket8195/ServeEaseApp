@@ -190,36 +190,38 @@ class _BookingsProviderState extends State<BookingsProvider>
       builder: (dialogContext) {
         return AlertDialog(
           title: Text('Review'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Category: ${booking.categoryName}'),
-              Text('Booking Date: ${booking.bookingDate}'),
-              SizedBox(height: 20),
-              Text('Rating:'),
-              RatingBar.builder(
-                initialRating: userRating,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 10,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Category: ${booking.categoryName}'),
+                Text('Booking Date: ${booking.bookingDate}'),
+                SizedBox(height: 20),
+                Text('Rating:'),
+                RatingBar.builder(
+                  initialRating: userRating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 10,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    userRating = rating;
+                  },
                 ),
-                onRatingUpdate: (rating) {
-                  userRating = rating;
-                },
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: commentController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your review',
+                SizedBox(height: 20),
+                TextField(
+                  controller: commentController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter your review',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           actions: [
             ElevatedButton(
